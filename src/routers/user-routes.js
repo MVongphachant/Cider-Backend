@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const auth = require('../middleware/authentication')
 const router = express.Router()
 
 router.post('/signup', async (req, res) => {
@@ -21,6 +22,16 @@ router.post('/login', async (req, res) => {
         res.json({ user: user, token: token })
     } catch (error) {
         res.status(400).send()
+    }
+})
+
+// fetch user reviews
+router.get('/me/reviews', auth, async (req, res) => {
+    try {
+        const userReviews = await req.user.populate('reviews').execPopulate()
+        res.json(userReviews.reviews)
+    } catch (error) {
+        res.status(500).send(error)
     }
 })
 

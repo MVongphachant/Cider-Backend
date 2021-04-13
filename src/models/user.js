@@ -26,10 +26,18 @@ const userSchema = new mongoose.Schema({
         type: String
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true},
+    toObject: { virtuals: true }
 })
 
 userSchema.plugin(uniqueValidator)
+
+userSchema.virtual('reviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'creator'
+})
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this

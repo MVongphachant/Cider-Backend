@@ -16,6 +16,7 @@ router.post('', async (req, res) => {
     }
 })
 
+// fetch all ciders
 router.get('', async (req, res) => {
     try {
         const ciders = await Cider.find()
@@ -26,8 +27,9 @@ router.get('', async (req, res) => {
 })
 
 // create new review for cider
-router.post('/review/:ciderId', auth, async (req, res) => {
+router.post('/post/review/:ciderId', auth, async (req, res) => {
     const review = new Review({
+        rating: req.body.rating,
         description: req.body.description,
         creator: req.user._id,
         cider: req.params.ciderId
@@ -38,6 +40,16 @@ router.post('/review/:ciderId', auth, async (req, res) => {
         res.json(review)
     } catch (error) {
         res.status(400).send(error)
+    }
+})
+
+// fetch reviews for a cider
+router.get('/get/reviews/:ciderId', async (req, res) => {
+    try {
+        const ciderReviews = await Review.find({ cider: req.params.ciderId }).populate('creator')
+        res.json(ciderReviews)
+    } catch (error) {
+        res.status(500).send(error)
     }
 })
 

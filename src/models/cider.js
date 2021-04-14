@@ -17,6 +17,12 @@ const ciderSchema = new mongoose.Schema({
     seasonal: Boolean
 })
 
+ciderSchema.virtual('reviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'cider'
+})
+
 const Cider = mongoose.model('Cider', ciderSchema)
 
 module.exports = Cider

@@ -39,6 +39,7 @@ router.post('/post/review/:ciderId', auth, async (req, res) => {
         await review.save()
         res.json(review)
     } catch (error) {
+        console.log(error)
         res.status(400).send(error)
     }
 })
